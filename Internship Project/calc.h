@@ -3,7 +3,9 @@
 
 
 void drift(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_driftUpdate, std::vector<double>& p_driftUpdate,
-    int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E);
+    int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E,
+    std::vector<double>& n_deltaDrift, std::vector<double>& p_deltaDrift);
+
 
 void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_diffusionUpdate, std::vector<double>& p_diffusionUpdate,
     double D_n, double D_p,

@@ -5,71 +5,69 @@
 
 
 void drift(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_driftUpdate, std::vector<double>& p_driftUpdate, 
-    int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E) 
+    int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E,
+    std::vector<double>& n_deltaDrift, std::vector<double>& p_deltaDrift)
 {
-    std::vector<double> pushed_n(Nx, 0.0);
-    std::vector<double> pushed_p(Nx, 0.0);
-
-    pushed_n[0] = n[0] * (mu_n * std::abs(E[0])) * dt / dx;
-    pushed_p[0] = p[0] * (mu_p * std::abs(E[0])) * dt / dx;
+    n_deltaDrift[0] = n[0] * (mu_n * std::abs(E[0])) * dt / dx;
+    p_deltaDrift[0] = p[0] * (mu_p * std::abs(E[0])) * dt / dx;
 
     if (E[0] > 0) {
-        n_driftUpdate[0] -= pushed_n[0];
-        n_driftUpdate[1] += pushed_n[0];
+        n_driftUpdate[0] -= n_deltaDrift[0];
+        n_driftUpdate[1] += n_deltaDrift[0];
 
-        p_driftUpdate[0] -= pushed_p[0];
+        p_driftUpdate[0] -= p_deltaDrift[0];
     }
     else if (E[0] < 0) {
-        n_driftUpdate[0] -= pushed_n[0];
+        n_driftUpdate[0] -= n_deltaDrift[0];
 
-        p_driftUpdate[0] -= pushed_p[0];
-        p_driftUpdate[1] += pushed_p[0];
+        p_driftUpdate[0] -= p_deltaDrift[0];
+        p_driftUpdate[1] += p_deltaDrift[0];
     }
 
     int last = Nx - 1;
 
-    pushed_n[last] = n[last] * (mu_n * std::abs(E[last])) * dt / dx;
-    pushed_p[last] = p[last] * (mu_p * std::abs(E[last])) * dt / dx;
+    n_deltaDrift[last] = n[last] * (mu_n * std::abs(E[last])) * dt / dx;
+    p_deltaDrift[last] = p[last] * (mu_p * std::abs(E[last])) * dt / dx;
 
     if (E[last] > 0) {
-        p_driftUpdate[last] -= pushed_p[last];
-        p_driftUpdate[last - 1] += pushed_p[last];
+        p_driftUpdate[last] -= p_deltaDrift[last];
+        p_driftUpdate[last - 1] += p_deltaDrift[last];
 
-        n_driftUpdate[last] -= pushed_n[last];
+        n_driftUpdate[last] -= n_deltaDrift[last];
     }
     else if (E[last] < 0) {
-        p_driftUpdate[last] -= pushed_p[last];
+        p_driftUpdate[last] -= p_deltaDrift[last];
 
-        n_driftUpdate[last] -= pushed_n[last];
-        n_driftUpdate[last - 1] += pushed_n[last];
+        n_driftUpdate[last] -= n_deltaDrift[last];
+        n_driftUpdate[last - 1] += n_deltaDrift[last];
     }
 
 
     for (int i = 1; i < Nx - 1; ++i) {
 
-        pushed_n[i] = n[i] * (mu_n * std::abs(E[i])) * dt / dx;
+        n_deltaDrift[i] = n[i] * (mu_n * std::abs(E[i])) * dt / dx;
 
         if (E[i] > 0) {
-            n_driftUpdate[i] -= pushed_n[i];
-            n_driftUpdate[i + 1] += pushed_n[i];
+            n_driftUpdate[i] -= n_deltaDrift[i];
+            n_driftUpdate[i + 1] += n_deltaDrift[i];
         }
         else if (E[i] < 0) {
-            n_driftUpdate[i] -= pushed_n[i];
-            n_driftUpdate[i - 1] += pushed_n[i];
+            n_driftUpdate[i] -= n_deltaDrift[i];
+            n_driftUpdate[i - 1] += n_deltaDrift[i];
         }
 
-        pushed_p[i] = p[i] * (mu_p * std::abs(E[i])) * dt / dx;
+        p_deltaDrift[i] = p[i] * (mu_p * std::abs(E[i])) * dt / dx;
 
         if (E[i] < 0) {
-            p_driftUpdate[i] -= pushed_p[i];
-            p_driftUpdate[i + 1] += pushed_p[i];
+            p_driftUpdate[i] -= p_deltaDrift[i];
+            p_driftUpdate[i + 1] += p_deltaDrift[i];
         }
         else if (E[i] > 0) {
-            p_driftUpdate[i] -= pushed_p[i];
-            p_driftUpdate[i - 1] += pushed_p[i];
+            p_driftUpdate[i] -= p_deltaDrift[i];
+            p_driftUpdate[i - 1] += p_deltaDrift[i];
         }
 
-        if (pushed_n[i] <= 0 || pushed_p[i] <= 0) {
+        if (n_deltaDrift[i] <= 0 || p_deltaDrift[i] <= 0) {
             std::cout << "";
         }
     }
@@ -175,7 +173,7 @@ n_updated = gamma * n * p * dt;
 void recombination(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_recombinationUpdate, std::vector<double>& p_recombinationUpdate, 
     double gamma, double dt, int Nx) {
     for (int i = 0; i < Nx; ++i) {
-        double recombined =  5000 * gamma * n[i] * p[i] * dt;
+        double recombined =  50 * gamma * n[i] * p[i] * dt;
         n_recombinationUpdate[i] = std::max(0.0, n[i] - recombined);
         p_recombinationUpdate[i] = std::max(0.0, p[i] - recombined);
     }

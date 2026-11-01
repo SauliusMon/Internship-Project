@@ -41,9 +41,9 @@ const double D_p = (k_B * T * mu_p) / e_charge;             // Diffusion constan
 const double gamma = (e_charge * (mu_n + mu_p)) / (eps * eps_0);    // Gamma coefficient (probability that electron and hole collide)
 
 
-const double alpha = 20e6;
+const double alpha = 20e2;
 const double L = 0.1;
-const double C = (eps_0 * eps * S) / L;
+const double C = (eps_0 * eps * S) / d;
 
 
 void mainProgram() {
@@ -53,6 +53,8 @@ void mainProgram() {
     //    n[i] = N0 * std::exp(-alpha * (i * dx));
     //    p[i] = n[i];
     //}
+
+    system("start cmd /k \"C:\\Users\\Sauls\\AppData\\Local\\Programs\\Python\\Python312\\python.exe plotData.py\"");
 
 
     double N0 = (L * C * U * alpha) / ((1.0 - std::exp(-alpha * d)) * e_charge * S);
@@ -80,8 +82,12 @@ void mainProgram() {
         std::vector<double> n_driftUpdate = n;
         std::vector<double> p_driftUpdate = p;
 
+        std::vector<double> n_deltaDrift(Nx, 0.0);
+        std::vector<double> p_deltaDrift(Nx, 0.0);
+
+
         // Calculate drift
-        drift(n, p, n_driftUpdate, p_driftUpdate, Nx, mu_n, mu_p, dt, dx, E);
+        drift(n, p, n_driftUpdate, p_driftUpdate, Nx, mu_n, mu_p, dt, dx, E, n_deltaDrift, p_deltaDrift);
         
         //n = n_driftUpdate;
         //p = p_driftUpdate;
@@ -92,7 +98,7 @@ void mainProgram() {
         std::vector<double> p_diffusionUpdate = p;
 
         // Calculate diffusion
-        diffusion(n, p, n_diffusionUpdate, p_diffusionUpdate, D_n, D_p, dx, dt, T, mu_n, mu_p, k_B, e_charge, Nx);
+        //diffusion(n, p, n_diffusionUpdate, p_diffusionUpdate, D_n, D_p, dx, dt, T, mu_n, mu_p, k_B, e_charge, Nx);
 
         //n = n_diffusionUpdate;
         //p = p_diffusionUpdate;
@@ -156,15 +162,16 @@ void mainProgram() {
         double I_total = 0.0;
         for (int i = 0; i < Nx; ++i) {
             // Dreifo srovės tankis: j_dr = e * E * (n*mu_n + p*mu_p) TIEK KIEK ISEINA -> n[i]
+            
             //double j_dr = e_charge * E[i] * ((n_driftUpdate[i] - n_old[i]) * mu_n + (p_driftUpdate[i] - p_old[i]) * mu_p);
             //double j_dr = e_charge * E[i] * (n[i] * mu_n + p[i] * mu_p);
-            double j_dr = e_charge * ((n_old[i] - n_driftUpdate[i]) + (p_old[i] - p_driftUpdate[i])) * dx / dt;
+            double j_dr = e_charge * ((n_deltaDrift[i]) + (p_deltaDrift[i])) * dx / dt;
 
-            // Poslinkio srovės tankis: j_sl = eps*eps_0 * dE/dt
+            // Poslinkio srovės tankis: j_sl = eps*eps_0 * dE/dt - integralas 0
             double j_sl = eps * eps_0 * (E[i] - E_prev[i]) / dt;
 
             // Pilnutinė srovė
-            I_total += (j_dr + j_sl) * dx / (S * Nx);
+            I_total += (j_dr + j_sl) * S / Nx; //dx / (S * Nx);
         }
 
         if (t_step * dt > 6e-6) {
@@ -200,5 +207,4 @@ void mainProgram() {
     outfile.close();
     std::cout << "Calculations done";
 
-    system("\"C:\\Users\\Sauls\\AppData\\Local\\Programs\\Python\\Python312\\python.exe\" plotData.py");
 }
