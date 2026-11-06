@@ -4,24 +4,26 @@
 #include <iostream>
 
 
-void drift(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_driftUpdate, std::vector<double>& p_driftUpdate, 
+void drift(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_current, std::vector<double>& p_current,
     int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E,
     std::vector<double>& n_deltaDrift, std::vector<double>& p_deltaDrift)
 {
+    //Absolute vertes kitoje vietoje
     n_deltaDrift[0] = n[0] * (mu_n * std::abs(E[0])) * dt / dx;
     p_deltaDrift[0] = p[0] * (mu_p * std::abs(E[0])) * dt / dx;
 
     if (E[0] > 0) {
-        n_driftUpdate[0] -= n_deltaDrift[0];
-        n_driftUpdate[1] += n_deltaDrift[0];
+        n_current[0] -= n_deltaDrift[0];
+        n_current[1] += n_deltaDrift[0];
 
-        p_driftUpdate[0] -= p_deltaDrift[0];
+        p_current[0] -= p_deltaDrift[0];
     }
     else if (E[0] < 0) {
-        n_driftUpdate[0] -= n_deltaDrift[0];
+        //n_current[0] -= n_deltaDrift[0];
+        n_deltaDrift[0] = 0;
 
-        p_driftUpdate[0] -= p_deltaDrift[0];
-        p_driftUpdate[1] += p_deltaDrift[0];
+        p_current[0] -= p_deltaDrift[0];
+        p_current[1] += p_deltaDrift[0];
     }
 
     int last = Nx - 1;
@@ -30,16 +32,17 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
     p_deltaDrift[last] = p[last] * (mu_p * std::abs(E[last])) * dt / dx;
 
     if (E[last] > 0) {
-        p_driftUpdate[last] -= p_deltaDrift[last];
-        p_driftUpdate[last - 1] += p_deltaDrift[last];
+        p_current[last] -= p_deltaDrift[last];
+        p_current[last - 1] += p_deltaDrift[last];
 
-        n_driftUpdate[last] -= n_deltaDrift[last];
+        n_current[last] -= n_deltaDrift[last];
     }
     else if (E[last] < 0) {
-        p_driftUpdate[last] -= p_deltaDrift[last];
+        //p_current[last] -= p_deltaDrift[last];
+        p_deltaDrift[last] = 0;
 
-        n_driftUpdate[last] -= n_deltaDrift[last];
-        n_driftUpdate[last - 1] += n_deltaDrift[last];
+        n_current[last] -= n_deltaDrift[last];
+        n_current[last - 1] += n_deltaDrift[last];
     }
 
 
@@ -48,27 +51,23 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
         n_deltaDrift[i] = n[i] * (mu_n * std::abs(E[i])) * dt / dx;
 
         if (E[i] > 0) {
-            n_driftUpdate[i] -= n_deltaDrift[i];
-            n_driftUpdate[i + 1] += n_deltaDrift[i];
+            n_current[i] -= n_deltaDrift[i];
+            n_current[i + 1] += n_deltaDrift[i];
         }
         else if (E[i] < 0) {
-            n_driftUpdate[i] -= n_deltaDrift[i];
-            n_driftUpdate[i - 1] += n_deltaDrift[i];
+            n_current[i] -= n_deltaDrift[i];
+            n_current[i - 1] += n_deltaDrift[i];
         }
 
         p_deltaDrift[i] = p[i] * (mu_p * std::abs(E[i])) * dt / dx;
 
         if (E[i] < 0) {
-            p_driftUpdate[i] -= p_deltaDrift[i];
-            p_driftUpdate[i + 1] += p_deltaDrift[i];
+            p_current[i] -= p_deltaDrift[i];
+            p_current[i + 1] += p_deltaDrift[i];
         }
         else if (E[i] > 0) {
-            p_driftUpdate[i] -= p_deltaDrift[i];
-            p_driftUpdate[i - 1] += p_deltaDrift[i];
-        }
-
-        if (n_deltaDrift[i] <= 0 || p_deltaDrift[i] <= 0) {
-            std::cout << "";
+            p_current[i] -= p_deltaDrift[i];
+            p_current[i - 1] += p_deltaDrift[i];
         }
     }
 }
@@ -98,7 +97,7 @@ D * (dn {difference between neighboring cells} /dx) * (1/dx) * dt = dn;
 
 */
 
-void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_diffusionUpdate, std::vector<double>& p_diffusionUpdate,
+void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_current, std::vector<double>& p_current,
     double D_n, double D_p,
     double dx, double dt, double T, double mu_n, double mu_p, double k_B, double e_charge,
     int Nx) 
@@ -116,12 +115,12 @@ void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::
         double flowOppC_n = alpha_n * (n[0] - 0.0);
 
         // In a case of positive / negative numbers - the flow either adds or subtracts
-        n_diffusionUpdate[0] = n[0] - flowC_n - flowOppC_n;
+        n_current[0] = n_current[0] - flowC_n - flowOppC_n;
 
 
         // Same thing here for the holes (can't pass through left side)
         double flowC_p = alpha_p * (p[0] - p[1]);
-        p_diffusionUpdate[0] = p[0] - flowC_p;
+        p_current[0] = p_current[0] - flowC_p;
 
 
     // Solving the boundary of i = Nx separately:
@@ -129,11 +128,11 @@ void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::
         int last = Nx - 1;
 
         flowC_n = alpha_n * (n[last] - n[last - 1]);
-        n_diffusionUpdate[last] = n[last] - flowC_n;
+        n_current[last] = n_current[last] - flowC_n;
 
         flowC_p = alpha_p * (p[last] - p[last - 1]);
         double flowOppC_p = alpha_p * (p[last] - 0.0);
-        p_diffusionUpdate[last] = p[last] - flowC_p - flowOppC_p;
+        p_current[last] = p_current[last] - flowC_p - flowOppC_p;
 
 
 
@@ -142,18 +141,18 @@ void diffusion(const std::vector<double>& n, const std::vector<double>& p, std::
         // Same thing here for the electrons
         flowC_n = alpha_n * (n[i] - n[i + 1]);
         flowOppC_n = alpha_n * (n[i] - n[i - 1]);
-        n_diffusionUpdate[i] = n[i] - flowC_n - flowOppC_n;
+        n_current[i] = n_current[i] - flowC_n - flowOppC_n;
         
         // Same thing here for the holes
         double flowC_p = alpha_p * (p[i] - p[i + 1]);
         double flowOppC_p = alpha_p * (p[i] - p[i - 1]);
-        p_diffusionUpdate[i] = p[i] - flowC_p - flowOppC_p;
+        p_current[i] = p_current[i] - flowC_p - flowOppC_p;
 
-        if (n_diffusionUpdate[i] < 0.0) {
+        if (n_current[i] < 0.0) {
             std::string error_msg = "Numerical instability: Electron concentration went negative at cell";
             throw std::runtime_error(error_msg);
         }
-        if (p_diffusionUpdate[i] < 0.0) {
+        if (p_current[i] < 0.0) {
             std::string error_msg = "Numerical instability: Hole concentration went negative at cell";
             throw std::runtime_error(error_msg);
         }
@@ -170,11 +169,11 @@ n_updated = gamma * n * p * dt;
 
 */
 
-void recombination(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_recombinationUpdate, std::vector<double>& p_recombinationUpdate, 
+void recombination(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_current, std::vector<double>& p_current,
     double gamma, double dt, int Nx) {
     for (int i = 0; i < Nx; ++i) {
-        double recombined =  50 * gamma * n[i] * p[i] * dt;
-        n_recombinationUpdate[i] = std::max(0.0, n[i] - recombined);
-        p_recombinationUpdate[i] = std::max(0.0, p[i] - recombined);
+        double recombined =  1/100 * gamma * n[i] * p[i] * dt;
+        n_current[i] = std::max(0.0, n_current[i] - recombined);
+        p_current[i] = std::max(0.0, p_current[i] - recombined);
     }
 }

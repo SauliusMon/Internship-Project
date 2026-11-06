@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\implementation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|solutionrelative:Internship Project\\implementation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|solutionrelative:Internship Project\\calc.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\implementation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|solutionrelative:Internship Project\\implementation.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{338DEC13-F361-4E26-AD29-C3CBEC37709D}|Internship Project\\Internship Project.vcxproj|C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -30,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
@@ -52,33 +52,33 @@
               "RelativeDocumentMoniker": "Internship Project\\calc.h",
               "ToolTip": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.h",
               "RelativeToolTip": "Internship Project\\calc.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAsAAABaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2026-10-17T18:43:02.892Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "calc.cpp",
               "DocumentMoniker": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.cpp",
               "RelativeDocumentMoniker": "Internship Project\\calc.cpp",
               "ToolTip": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.cpp",
               "RelativeToolTip": "Internship Project\\calc.cpp",
-              "ViewState": "AgIAAJYAAAAAAAAAAAAowK0AAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAowEsAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-17T16:29:08.159Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "implementation.cpp",
               "DocumentMoniker": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\implementation.cpp",
               "RelativeDocumentMoniker": "Internship Project\\implementation.cpp",
               "ToolTip": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\implementation.cpp",
               "RelativeToolTip": "Internship Project\\implementation.cpp",
-              "ViewState": "AgIAAJwAAAAAAAAAAAAAAKkAAABPAAAAAAAAAA==",
+              "ViewState": "AgIAAGIAAAAAAAAAAAAowH4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-11T14:54:54.93Z",
               "EditorCaption": ""
