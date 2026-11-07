@@ -5,6 +5,8 @@
 #include <cmath>
 #include <fstream>
 
+const std::string base_path = "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\";
+
 
 const double eps_0 = 8.854e-12;         // Vacuum dielectric permittivity (F/m)
 const double eps = 3.0;                 // Material dielectric permittivity
@@ -12,20 +14,20 @@ const double d = 1e-6;                  // Thickness d = 1 micrometer (m)
 const double S = 4e-6;                  // Area S = 2x2 mm^2 (m^2)
 const double U = 3.0;                   // Voltage U = 3 V (or 6 V)
 const double mu_n = 1e-7;               // Electron mobility (m^2/Vs)
-const double mu_p = 5e-12;               // Hole mobility (m^2/Vs)
+const double mu_p = 5e-8;               // Hole mobility (m^2/Vs)
 
 
 const int Nx = 1000;                     // Number of space layers
 const double dx = d / Nx;               // Space step (dx)
 
 
-const double dt = 1e-11;                    //d*d / (mu_p * U * Nx * 1000);                // Picosecond order step
+const double dt = 1e-10;                    //d*d / (mu_p * U * Nx * 1000);                // Picosecond order step
 const int steps = 10000000;                                  // Number of simulation steps
 
 
 std::vector<double> n(Nx, 0.0);
 std::vector<double> p(Nx, 0.0);
-std::vector<double> E(Nx, U / d);
+std::vector<double> E(Nx + 1, U / d);
 std::vector<double> E_prev = E;
 
 
@@ -40,9 +42,8 @@ const double D_p = (k_B * T * mu_p) / e_charge;             // Diffusion constan
 
 const double gamma = (e_charge * (mu_n + mu_p)) / (eps * eps_0);    // Gamma coefficient (probability that electron and hole collide)
 
-
 const double alpha = 20e6;
-const double L = 0.01;
+const double L = 10;
 const double C = (eps_0 * eps * S) / d;
 
 
@@ -59,7 +60,7 @@ void mainProgram() {
 
 
     std::ofstream outfile("C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\tof_rezultatai.csv");
-    outfile << "Laikas_s,Srove_A\n";
+    outfile << "Laikas_s,Srove_A,Laukas_E\n";
     outfile.flush();
 
     
@@ -110,7 +111,7 @@ void mainProgram() {
         // Puason equation: dE/dx = e(n-p)/(eps*eps_0)
         double integral_E = E[0] * dx;
         for (int i = 1; i < Nx; ++i) {
-            double rho = e_charge * (p[i] - n[i]);
+            double rho = e_charge * (n[i] - p[i]);
             E[i] = E[i - 1] + rho / (eps * eps_0) * dx;
             integral_E += E[i] * dx;
         }
@@ -120,6 +121,9 @@ void mainProgram() {
         for (int i = 0; i < Nx; ++i) {
             E[i] += correction;
         }
+
+
+
 
 
         if (t_step % 100 == 0) {
@@ -156,9 +160,17 @@ void mainProgram() {
 
             // Writing TIME-&&-CURRENT data to text file
             std::ofstream appendfile("C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\tof_rezultatai.csv", std::ios::app);
-            appendfile << t_step * dt << "," << I_total << "\n";
+            appendfile << t_step * dt << "," << I_total << "," << integral_E  << "\n";
             appendfile.close();
             outfile.flush();
+
+            std::ofstream profilefile(base_path + "tof_E_profilis.csv", std::ios::trunc);
+            profilefile << "x_m,E_Vm,n_m3,p_m3\n";
+            for (int i = 0; i < Nx; ++i) {
+                profilefile << i * dx << "," << E[i] << "," << n[i] << "," << p[i] << "\n";
+            }
+            profilefile.close();
+
 
 
             if (std::abs(I_total - last_I_total) < 1e-15) {
