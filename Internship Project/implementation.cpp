@@ -143,17 +143,43 @@ void mainProgram() {
         }
 
 
+<<<<<<< Updated upstream
         // Puasono equation: dE/dx = e(n-p)/(eps*eps_0)
         double integral_E = E[0] * dx;
         for (int i = 1; i < Nx; ++i) {
             double rho = e_charge * (p[i] - n[i]);
             E[i] = E[i - 1] + rho / (eps * eps_0) * dx;
             integral_E += E[i] * dx;
+=======
+        //// Puason equation: dE/dx = e(n-p)/(eps*eps_0)
+        //double integral_E = E[0] * dx;
+        //for (int i = 1; i < Nx; ++i) {
+        //    double rho = e_charge * (n[i] - p[i]);
+        //    E[i] = E[i - 1] + rho / (eps * eps_0) * dx;
+        //    integral_E += E[i] * dx;
+        //}
+
+        //// Voltage correction: U = integral(E dx)
+        //double correction = (U - integral_E) / d;
+        //for (int i = 0; i < Nx; ++i) {
+        //    E[i] += correction;
+        //}
+
+        for (int i = 0; i < Nx; ++i) {
+            double rho = e_charge * (p[i] - n[i]);
+            E[i + 1] = E[i] + (rho / (eps * eps_0)) * dx;
+>>>>>>> Stashed changes
         }
 
-        // Voltage correction: U = integral(E dx)
-        double correction = (U - integral_E) / d;
+        // Calculating real integral by using averages
+        double integral_E = 0.0;
         for (int i = 0; i < Nx; ++i) {
+            integral_E += 0.5 * (E[i] + E[i + 1]) * dx;
+        }
+
+        // Voltage correction
+        double correction = (U - integral_E) / d;
+        for (int i = 0; i <= Nx; ++i) {
             E[i] += correction;
         }
 
@@ -167,6 +193,7 @@ void mainProgram() {
             //double j_dr = e_charge * E[i] * (n[i] * mu_n + p[i] * mu_p);
             double j_dr = e_charge * ((n_deltaDrift[i]) + (p_deltaDrift[i])) * dx / dt;
 
+<<<<<<< Updated upstream
             // Poslinkio srovės tankis: j_sl = eps*eps_0 * dE/dt - integralas 0
             double j_sl = eps * eps_0 * (E[i] - E_prev[i]) / dt;
 
@@ -181,6 +208,8 @@ void mainProgram() {
         E_prev = E;
 
 
+=======
+>>>>>>> Stashed changes
         if (t_step % 100 == 0) {
             std::ofstream appendfile("C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\tof_rezultatai.csv", std::ios::app);
             appendfile << t_step * dt << "," << I_total << "\n";

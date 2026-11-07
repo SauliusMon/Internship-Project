@@ -42,7 +42,8 @@
               "RelativeToolTip": "Internship Project\\implementation.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2026-10-19T12:33:30.433Z"
+              "WhenOpened": "2026-10-19T12:33:30.433Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -65,7 +66,11 @@
               "RelativeDocumentMoniker": "Internship Project\\calc.cpp",
               "ToolTip": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\calc.cpp",
               "RelativeToolTip": "Internship Project\\calc.cpp",
+<<<<<<< Updated upstream
               "ViewState": "AgIAAJYAAAAAAAAAAAAowK0AAAAmAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-17T16:29:08.159Z",
               "EditorCaption": ""
@@ -78,7 +83,11 @@
               "RelativeDocumentMoniker": "Internship Project\\implementation.cpp",
               "ToolTip": "C:\\Users\\Sauls\\source\\repos\\Internship Project\\Internship Project\\implementation.cpp",
               "RelativeToolTip": "Internship Project\\implementation.cpp",
+<<<<<<< Updated upstream
               "ViewState": "AgIAAJwAAAAAAAAAAAAAAKkAAABPAAAAAAAAAA==",
+=======
+              "ViewState": "AgIAAIwAAAAAAAAAAAAiwKUAAAAAAAAAAAAAAA==",
+>>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2026-10-11T14:54:54.93Z",
               "EditorCaption": ""
