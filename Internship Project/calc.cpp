@@ -8,11 +8,8 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
     int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E,
     std::vector<double>& n_deltaDrift, std::vector<double>& p_deltaDrift)
 {
-<<<<<<< Updated upstream
-    n_deltaDrift[0] = n[0] * (mu_n * std::abs(E[0])) * dt / dx;
-    p_deltaDrift[0] = p[0] * (mu_p * std::abs(E[0])) * dt / dx;
-=======
     std::vector<double> Ec(Nx);
+
     for (int i = 0; i < Nx; ++i) {
         Ec[i] = 0.5 * (E[i] + E[i + 1]);
     }
@@ -21,15 +18,14 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
     //Absolute vertes kitoje vietoje
     n_deltaDrift[0] = n[0] * (mu_n * std::abs(Ec[0])) * dt / dx;
     p_deltaDrift[0] = p[0] * (mu_p * std::abs(Ec[0])) * dt / dx;
->>>>>>> Stashed changes
 
-    if (E[0] > 0) {
+    if (Ec[0] > 0) {
         n_driftUpdate[0] -= n_deltaDrift[0];
         n_driftUpdate[1] += n_deltaDrift[0];
 
         p_driftUpdate[0] -= p_deltaDrift[0];
     }
-    else if (E[0] < 0) {
+    else if (Ec[0] < 0) {
         n_driftUpdate[0] -= n_deltaDrift[0];
 
         p_driftUpdate[0] -= p_deltaDrift[0];
@@ -41,13 +37,13 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
     n_deltaDrift[last] = n[last] * (mu_n * std::abs(Ec[last])) * dt / dx;
     p_deltaDrift[last] = p[last] * (mu_p * std::abs(Ec[last])) * dt / dx;
 
-    if (E[last] > 0) {
+    if (Ec[last] > 0) {
         p_driftUpdate[last] -= p_deltaDrift[last];
         p_driftUpdate[last - 1] += p_deltaDrift[last];
 
         n_driftUpdate[last] -= n_deltaDrift[last];
     }
-    else if (E[last] < 0) {
+    else if (Ec[last] < 0) {
         p_driftUpdate[last] -= p_deltaDrift[last];
 
         n_driftUpdate[last] -= n_deltaDrift[last];
@@ -59,22 +55,22 @@ void drift(const std::vector<double>& n, const std::vector<double>& p, std::vect
 
         n_deltaDrift[i] = n[i] * (mu_n * std::abs(Ec[i])) * dt / dx;
 
-        if (E[i] > 0) {
+        if (Ec[i] > 0) {
             n_driftUpdate[i] -= n_deltaDrift[i];
             n_driftUpdate[i + 1] += n_deltaDrift[i];
         }
-        else if (E[i] < 0) {
+        else if (Ec[i] < 0) {
             n_driftUpdate[i] -= n_deltaDrift[i];
             n_driftUpdate[i - 1] += n_deltaDrift[i];
         }
 
         p_deltaDrift[i] = p[i] * (mu_p * std::abs(Ec[i])) * dt / dx;
 
-        if (E[i] < 0) {
+        if (Ec[i] < 0) {
             p_driftUpdate[i] -= p_deltaDrift[i];
             p_driftUpdate[i + 1] += p_deltaDrift[i];
         }
-        else if (E[i] > 0) {
+        else if (Ec[i] > 0) {
             p_driftUpdate[i] -= p_deltaDrift[i];
             p_driftUpdate[i - 1] += p_deltaDrift[i];
         }
