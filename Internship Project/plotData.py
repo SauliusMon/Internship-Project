@@ -52,6 +52,10 @@ ax4.legend(loc="upper right")
 ax4.grid(True)
 
 
+ax3.set_xlim(0, d);
+ax4.set_xlim(0, d);
+
+
 def atnaujinti_grafika(i):
     try:
         # --- Laiko duomenys (ax1, ax2) ---

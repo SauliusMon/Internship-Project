@@ -3,7 +3,7 @@
 
 
 void drift(const std::vector<double>& n, const std::vector<double>& p, std::vector<double>& n_current, std::vector<double>& p_current,
-    int Nx, double mu_n, double mu_p, double dt, double dx, const std::vector<double>& E,
+    int Nx, double mu_n, double mu_p, double dt, double dx, std::vector<double>& E_change,
     std::vector<double>& n_deltaDrift, std::vector<double>& p_deltaDrift);
 
 
